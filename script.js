@@ -181,6 +181,145 @@ class VocabularyApp {
                 translation: "атлетический",
                 synonyms: ["muskulös", "kräftig"],
                 synonymsTranslation: ["мускулистый", "сильный"]
+            },{
+                german: "barrierefrei",
+                translation: "безбарьерный",
+                synonyms: ["leicht zugänglich"],
+                synonymsTranslation: ["легкодоступный"]
+            },
+            {
+                german: "betroffen",
+                translation: "пораженный",
+                synonyms: ["auf jdn bezogen", "fassungslos"],
+                synonymsTranslation: ["относящийся к кому-либо", "ошеломленный"]
+            },
+            {
+                german: "depressiv",
+                translation: "депрессивный",
+                synonyms: ["sehr traurig", "traurig"],
+                synonymsTranslation: ["очень грустный", "грустный"]
+            },
+            {
+                german: "gesetzlich",
+                translation: "законный",
+                synonyms: ["rechtlich"],
+                synonymsTranslation: ["правовой"]
+            },
+            {
+                german: "hilfreich",
+                translation: "полезный",
+                synonyms: ["nützlich"],
+                synonymsTranslation: ["полезный"]
+            },
+            {
+                german: "illegal",
+                translation: "незаконный",
+                synonyms: ["verboten"],
+                synonymsTranslation: ["запрещенный"]
+            },
+            {
+                german: "legal",
+                translation: "законный",
+                synonyms: ["gestaltet", "erlaubt"],
+                synonymsTranslation: ["оформленный", "разрешенный"]
+            },
+            {
+                german: "optisch",
+                translation: "оптический",
+                synonyms: ["vom Äußerlichen gesehen"],
+                synonymsTranslation: ["с внешней точки зрения"]
+            },{
+                german: "der Genuss",
+                translation: "наслаждение",
+                synonyms: ["der Geschmack"],
+                synonymsTranslation: ["вкус"]
+            },
+            {
+                german: "die Finanzierung",
+                translation: "финансирование",
+                synonyms: ["die Bezahlung"],
+                synonymsTranslation: ["оплата"]
+            },
+            {
+                german: "die Kontrolle",
+                translation: "контроль",
+                synonyms: ["die Überwachung"],
+                synonymsTranslation: ["надзор"]
+            },
+            {
+                german: "die Lebenserwartung",
+                translation: "продолжительность жизни",
+                synonyms: ["die Lebensdauer"],
+                synonymsTranslation: ["срок службы"]
+            },
+            {
+                german: "der Operation",
+                translation: "операция",
+                synonyms: ["die OP"],
+                synonymsTranslation: ["операция"]
+            },
+            {
+                german: "der Rücksicht",
+                translation: "учтивость",
+                synonyms: ["der Respekt gegenüber anderen"],
+                synonymsTranslation: ["уважение к другим"]
+            },
+            {
+                german: "das Signal",
+                translation: "сигнал",
+                synonyms: ["das Alarmzeichen"],
+                synonymsTranslation: ["тревожный знак"]
+            },
+            {
+                german: "der Sportverein",
+                translation: "спортивный клуб",
+                synonyms: ["der Sportclub"],
+                synonymsTranslation: ["спортивный клуб"]
+            },
+            {
+                german: "die Teilnahme",
+                translation: "участие",
+                synonyms: ["das Mitmachen", "die Mitwirkung"],
+                synonymsTranslation: ["сотрудничество", "содействие"]
+            },
+            {
+                german: "das Verhalten",
+                translation: "поведение",
+                synonyms: ["die Disziplin", "das Benehmen"],
+                synonymsTranslation: ["дисциплина", "манеры"]
+            },
+            {
+                german: "der Verlust",
+                translation: "потеря",
+                synonyms: ["der Gewinn"],
+                synonymsTranslation: ["выигрыш (антоним)"]
+            },{
+                german: "konsumieren",
+                translation: "потреблять",
+                synonyms: ["einnehmen", "kaufen", "essen"],
+                synonymsTranslation: ["принимать", "покупать", "есть"],
+                partOfSpeech: "Verb"
+            },
+            {
+                german: "wandern",
+                translation: "совершать пешие прогулки",
+                synonyms: ["spazieren in der Natur", "bummeln", "spazieren in der Stadt", "im Einkaufszentrum flanieren"],
+                synonymsTranslation: ["гулять на природе", "прогуливаться", "гулять по городу", "фланировать в торговом центре"],
+                partOfSpeech: "Verb"
+            },
+            {
+                german: "schätzungsweise",
+                translation: "приблизительно",
+                synonyms: ["circa", "etwa"],
+                synonymsTranslation: ["примерно", "около"],
+                partOfSpeech: "Adverb"
+            },
+            {
+                german: "vor allem",
+                translation: "прежде всего",
+                synonyms: ["besonders"],
+                synonymsTranslation: ["особенно"],
+                partOfSpeech: "Adverb"
             },
         ];
 
