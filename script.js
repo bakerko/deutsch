@@ -58,47 +58,130 @@ class VocabularyApp {
     constructor() {
         this.words = [
             {
-                german: "Haus",
-                synonyms: ["Gebäude", "Wohnhaus", "Heim"],
-                synonymsTranslation: ["здание", "жилой дом", "дом"],
-                translation: "дом"
+                german: "die Bewegungsfähigkeit",
+                translation: "двигательная способность",
+                synonyms: ["die Motorik"],
+                synonymsTranslation: ["моторика"]
             },
             {
-                german: "Auto",
-                synonyms: ["Wagen", "Fahrzeug", "PKW"],
-                synonymsTranslation: ["автомобиль", "транспортное средство", "легковой автомобиль"],
-                translation: "автомобиль"
+                german: "die Demenz",
+                translation: "деменция",
+                synonyms: ["geistige Behinderung"],
+                synonymsTranslation: ["умственная отсталость"]
             },
             {
-                german: "Buch",
-                synonyms: ["Werk", "Literatur", "Schrift"],
-                synonymsTranslation: ["произведение", "литература", "писание"],
-                translation: "книга"
+                german: "der Fahrtendienst",
+                translation: "транспортная служба",
+                synonyms: ["der Abholdienst"],
+                synonymsTranslation: ["служба доставки"]
             },
             {
-                german: "Freund",
-                synonyms: ["Kumpel", "Kamerad", "Vertrauter"],
-                synonymsTranslation: ["приятель", "товарищ", "доверенное лицо"],
-                translation: "друг"
+                german: "die Körperhygiene",
+                translation: "гигиена тела",
+                synonyms: ["die Körperpflege"],
+                synonymsTranslation: ["уход за телом"]
             },
             {
-                german: "Arbeit",
-                synonyms: ["Job", "Beruf", "Tätigkeit"],
-                synonymsTranslation: ["работа", "профессия", "деятельность"],
-                translation: "работа"
+                german: "die Kräftigung",
+                translation: "укрепление",
+                synonyms: ["die Stärkung"],
+                synonymsTranslation: ["усиление"]
             },
             {
-                german: "schön",
-                synonyms: ["hübsch", "attraktiv", "ansehnlich"],
-                synonymsTranslation: ["милый", "привлекательный", "видный"],
-                translation: "красивый"
+                german: "die Mobilisation",
+                translation: "мобилизация",
+                synonyms: ["das Bewegen", "das Gehen"],
+                synonymsTranslation: ["движение", "ходьба"]
             },
             {
-                german: "essen",
-                synonyms: ["speisen", "nahrung aufnehmen", "verpflegen"],
-                synonymsTranslation: ["питаться", "принимать пищу", "кормить"],
-                translation: "есть"
-            }
+                german: "der Rollator",
+                translation: "роллатор",
+                synonyms: ["die Gehhilfe"],
+                synonymsTranslation: ["ходунки"]
+            },
+            {
+                german: "belasten",
+                translation: "нагружать",
+                synonyms: ["zur Last fallen"],
+                synonymsTranslation: ["обременять"]
+            },
+            {
+                german: "bewusst",
+                translation: "сознательный",
+                synonyms: ["geistig wach"],
+                synonymsTranslation: ["умственно бодрый"]
+            },
+            {
+                german: "dement",
+                translation: "дементный",
+                synonyms: ["geistig verwirrt"],
+                synonymsTranslation: ["умственно запутанный"]
+            },
+            {
+                german: "verwirrt",
+                translation: "запутанный",
+                synonyms: ["durcheinander"],
+                synonymsTranslation: ["беспорядочный"]
+            },
+            {
+                german: "stundenweise",
+                translation: "посчасово",
+                synonyms: ["pro Stunde"],
+                synonymsTranslation: ["в час"]
+            },
+            {
+                german: "der Aufwand",
+                translation: "затраты",
+                synonyms: ["die Bemühungen", "die Ausbrenungen"],
+                synonymsTranslation: ["усилия", "выгорания"]
+            },
+            {
+                german: "das Ausmaß",
+                translation: "масштаб",
+                synonyms: ["die Größe", "der Umfang", "die Anzahl"],
+                synonymsTranslation: ["размер", "объем", "количество"]
+            },
+            {
+                german: "die Finanzierung",
+                translation: "финансирование",
+                synonyms: ["die Bezahlung"],
+                synonymsTranslation: ["оплата"]
+            },
+            {
+                german: "der Genuss",
+                translation: "наслаждение",
+                synonyms: ["der Geschmack"],
+                synonymsTranslation: ["вкус"]
+            },{
+                german: "abhängig von",
+                translation: "зависимый от",
+                synonyms: ["süchtig von"],
+                synonymsTranslation: ["одержимый от"]
+            },
+            {
+                german: "anerkannt",
+                translation: "признанный",
+                synonyms: ["akzeptiert", "nostrifiziert"],
+                synonymsTranslation: ["принятый", "легализованный"]
+            },
+            {
+                german: "angewiesen",
+                translation: "нуждающийся",
+                synonyms: ["Hilfe benötigen"],
+                synonymsTranslation: ["требующий помощи"]
+            },
+            {
+                german: "akustisch",
+                translation: "акустический",
+                synonyms: ["klangmäßig", "laut dem Gehör"],
+                synonymsTranslation: ["звуковой", "по слуху"]
+            },
+            {
+                german: "athletisch",
+                translation: "атлетический",
+                synonyms: ["muskulös", "kräftig"],
+                synonymsTranslation: ["мускулистый", "сильный"]
+            },
         ];
 
         this.remainingWords = [...this.words];
