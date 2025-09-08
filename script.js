@@ -1,63 +1,13 @@
 // script.js
-class GoogleTranslateTTS {
-    constructor() {
-        this.baseUrl = 'https://translate.google.com/translate_tts';
-        this.isPlaying = false;
-    }
-
-    async speak(text, language = 'de') {
-        if (this.isPlaying) {
-            this.stop();
-        }
-
-        try {
-            this.isPlaying = true;
-            const audio = new Audio();
-            const encodedText = encodeURIComponent(text);
-
-            audio.src = `${this.baseUrl}?ie=UTF-8&q=${encodedText}&tl=${language}&client=tw-ob&ttsspeed=0.8`;
-
-            await audio.play();
-
-            await new Promise((resolve) => {
-                audio.onended = () => {
-                    this.isPlaying = false;
-                    resolve();
-                };
-                audio.onerror = () => {
-                    this.isPlaying = false;
-                    resolve();
-                };
-                setTimeout(() => {
-                    this.isPlaying = false;
-                    resolve();
-                }, 5000);
-            });
-
-        } catch (error) {
-            console.log('Google TTS error, using fallback');
-            this.fallbackTTS(text);
-        }
-    }
-
-    stop() {
-        speechSynthesis.cancel();
-        this.isPlaying = false;
-    }
-
-    fallbackTTS(text) {
-        const utterance = new SpeechSynthesisUtterance(text);
-        utterance.lang = 'de-DE';
-        utterance.rate = 0.8;
-        utterance.pitch = 1.0;
-        speechSynthesis.speak(utterance);
-    }
-}
-
-// Основной класс приложения
 class VocabularyApp {
     constructor() {
-        // Используем словарь из внешнего файла
+        // Проверяем что словарь загружен
+        if (typeof vocabularyDictionary === 'undefined') {
+            console.error('Словарь не загружен!');
+            this.showError();
+            return;
+        }
+
         this.words = vocabularyDictionary;
         this.remainingWords = [...this.words];
         this.currentCard = null;
@@ -66,25 +16,28 @@ class VocabularyApp {
         this.init();
     }
 
-    // ... остальные методы без изменений ...
-    init() {
-        this.cardContainer = document.getElementById('cardContainer');
-        this.btnLeft = document.getElementById('btnLeft');
-        this.btnRight = document.getElementById('btnRight');
-        this.btnSound = document.getElementById('btnSound');
-        this.btnFlip = document.getElementById('btnFlip');
-        this.progressBar = document.getElementById('progressBar');
-        this.remainingCount = document.getElementById('remainingCount');
-
-        this.setupEventListeners();
-        this.updateStats();
-        this.showNextCard();
+    showError() {
+        document.body.innerHTML = `
+            <div style="padding: 20px; text-align: center;">
+                <h2>Ошибка загрузки словаря</h2>
+                <p>Файл dictionary.js не загружен или содержит ошибки</p>
+                <button onclick="location.reload()">Перезагрузить</button>
+            </div>
+        `;
     }
 
     // ... остальной код без изменений ...
 }
 
-// Инициализация приложения
+// Ждем полной загрузки страницы и словаря
 document.addEventListener('DOMContentLoaded', () => {
-    new VocabularyApp();
+    // Даем время на загрузку dictionary.js
+    setTimeout(() => {
+        if (typeof vocabularyDictionary !== 'undefined') {
+            new VocabularyApp();
+        } else {
+            console.error('Словарь не загружен после ожидания');
+            document.body.innerHTML += '<p style="color: red;">Ошибка: словарь не загружен</p>';
+        }
+    }, 100);
 });
