@@ -1,76 +1,56 @@
-class FreeHighQualityTTS {
+class GoogleTranslateTTS {
     constructor() {
-        this.voices = [];
-        this.init();
+        this.baseUrl = 'https://translate.google.com/translate_tts';
+        this.isPlaying = false;
     }
 
-    async init() {
-        await this.loadVoices();
-    }
+    async speak(text, language = 'de') {
+        if (this.isPlaying) {
+            this.stop();
+        }
 
-    loadVoices() {
-        return new Promise((resolve) => {
-            if (speechSynthesis.getVoices().length > 0) {
-                this.voices = speechSynthesis.getVoices();
-                resolve();
-            } else {
-                speechSynthesis.addEventListener('voiceschanged', () => {
-                    this.voices = speechSynthesis.getVoices();
+        try {
+            this.isPlaying = true;
+            const audio = new Audio();
+            const encodedText = encodeURIComponent(text);
+
+            audio.src = `${this.baseUrl}?ie=UTF-8&q=${encodedText}&tl=${language}&client=tw-ob&ttsspeed=0.8`;
+
+            await audio.play();
+
+            await new Promise((resolve) => {
+                audio.onended = () => {
+                    this.isPlaying = false;
                     resolve();
-                });
-            }
-        });
-    }
+                };
+                audio.onerror = () => {
+                    this.isPlaying = false;
+                    resolve();
+                };
+                setTimeout(() => {
+                    this.isPlaying = false;
+                    resolve();
+                }, 5000);
+            });
 
-    speak(text, language = 'de-DE') {
-        return new Promise((resolve) => {
-            speechSynthesis.cancel();
-
-            const utterance = new SpeechSynthesisUtterance(text);
-
-            // Оптимальные настройки для немецкого
-            utterance.rate = 0.85;
-            utterance.pitch = 1.1;
-            utterance.volume = 1.0;
-            utterance.lang = language;
-
-            this.selectBestVoice(utterance, language);
-
-            utterance.onend = resolve;
-            utterance.onerror = resolve;
-
-            speechSynthesis.speak(utterance);
-        });
-    }
-
-    selectBestVoice(utterance, language) {
-        const germanVoices = this.voices.filter(voice =>
-            voice.lang.includes('de') && voice.localService === false
-        );
-
-        if (germanVoices.length > 0) {
-            const neuralVoice = germanVoices.find(voice =>
-                voice.name.includes('Neural') || voice.name.includes('Wave')
-            );
-
-            const premiumVoice = germanVoices.find(voice =>
-                voice.name.includes('Premium') || voice.name.includes('Enhanced')
-            );
-
-            utterance.voice = neuralVoice || premiumVoice || germanVoices[0];
+        } catch (error) {
+            console.log('Google TTS error, using fallback');
+            this.fallbackTTS(text);
         }
     }
 
-    getAvailableVoices() {
-        return this.voices.filter(voice => voice.lang.includes('de'));
+    stop() {
+        speechSynthesis.cancel();
+        this.isPlaying = false;
     }
-}
 
-// Предзагрузка голосов при запуске
-function preloadTTSVoice() {
-    const utterance = new SpeechSynthesisUtterance(' ');
-    speechSynthesis.speak(utterance);
-    speechSynthesis.cancel();
+    fallbackTTS(text) {
+        const utterance = new SpeechSynthesisUtterance(text);
+        utterance.lang = 'de-DE';
+        utterance.rate = 0.8;
+        utterance.pitch = 1.0;
+        speechSynthesis.speak(utterance);
+    }
 }
 
 // Основной класс приложения
@@ -123,7 +103,7 @@ class VocabularyApp {
 
         this.remainingWords = [...this.words];
         this.currentCard = null;
-        this.tts = new FreeHighQualityTTS();
+        this.tts = new GoogleTranslateTTS();
         this.init();
     }
 
@@ -139,9 +119,6 @@ class VocabularyApp {
         this.setupEventListeners();
         this.updateStats();
         this.showNextCard();
-
-        // Предзагрузка голосов
-        preloadTTSVoice();
     }
 
     setupEventListeners() {
@@ -263,9 +240,8 @@ class VocabularyApp {
         if (!this.currentCard) return;
 
         try {
-            // Добавляем индикатор загрузки
             this.btnSound.classList.add('tts-loading');
-            await this.tts.speak(this.currentCard.german, 'de-DE');
+            await this.tts.speak(this.currentCard.german, 'de');
         } catch (error) {
             console.error('TTS error:', error);
             // Fallback на стандартный TTS

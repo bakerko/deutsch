@@ -214,19 +214,7 @@ main {
     animation: swipeLeft 0.5s forwards;
 }
 
-/* Добавляем в конец файла */
-.tts-loading {
-    opacity: 0.7;
-    animation: pulse 1.5s infinite;
-    pointer-events: none;
-}
-
-@keyframes pulse {
-    0% { opacity: 0.7; }
-    50% { opacity: 0.4; }
-    100% { opacity: 0.7; }
-}
-
+/* Стили для синонимов и TTS */
 .synonym-item {
     display: flex;
     justify-content: space-between;
@@ -257,6 +245,18 @@ main {
     width: 100%;
     max-height: 200px;
     overflow-y: auto;
+}
+
+.tts-loading {
+    opacity: 0.7;
+    animation: pulse 1.5s infinite;
+    pointer-events: none;
+}
+
+@keyframes pulse {
+    0% { opacity: 0.7; }
+    50% { opacity: 0.4; }
+    100% { opacity: 0.7; }
 }
 
 @media (max-width: 480px) {
