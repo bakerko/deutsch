@@ -1,28 +1,14 @@
 // script.js
-// Резервный словарь на случай если внешний не загрузится
-const fallbackDictionary = [
-    {
-        german: "Haus",
-        translation: "дом",
-        synonyms: ["Gebäude", "Wohnhaus"],
-        synonymsTranslation: ["здание", "жилой дом"],
-        partOfSpeech: "Substantiv"
-    },
-    {
-        german: "Auto",
-        translation: "автомобиль",
-        synonyms: ["Wagen", "Fahrzeug"],
-        synonymsTranslation: ["машина", "транспортное средство"],
-        partOfSpeech: "Substantiv"
-    },
-    {
-        german: "buchen",
-        translation: "бронировать",
-        synonyms: ["reservieren", "bestehlen"],
-        synonymsTranslation: ["резервировать", "заказывать"],
-        partOfSpeech: "Verb"
-    }
-];
+console.log('Script.js запущен');
+
+// Проверка что словарь загружен
+if (typeof vocabularyDictionary === 'undefined') {
+    console.error('СЛОВАРЬ НЕ ЗАГРУЖЕН! Проверь dictionary.js');
+    alert('Ошибка: словарь не загружен. Проверь консоль для деталей.');
+    throw new Error('vocabularyDictionary is not defined');
+}
+
+console.log('Словарь доступен, слов:', vocabularyDictionary.length);
 
 class GoogleTranslateTTS {
     constructor() {
@@ -81,20 +67,12 @@ class GoogleTranslateTTS {
 
 class VocabularyApp {
     constructor() {
-        // Всегда есть словарь - либо внешний, либо резервный
-        this.words = typeof vocabularyDictionary !== 'undefined' ?
-            vocabularyDictionary : fallbackDictionary;
-
+        this.words = vocabularyDictionary;
         this.remainingWords = [...this.words];
         this.currentCard = null;
         this.tts = new GoogleTranslateTTS();
         this.isSwiping = false;
 
-        // Логируем какой словарь используем
-        console.log('Используется словарь:',
-            typeof vocabularyDictionary !== 'undefined' ? 'внешний' : 'резервный');
-
-        // Вызываем инициализацию после создания всех свойств
         this.initializeApp();
     }
 
@@ -177,11 +155,14 @@ class VocabularyApp {
         card.innerHTML = `
             <div class="card-front">
                 <div class="german-word">${word.german}</div>
-                <div class="translation">${word.translation}</div>
+                <div class="translation">${word.partOfSpeech || ''}</div>
             </div>
             <div class="card-back">
-                <div class="synonyms-title">Synonyme mit Übersetzung:</div>
-                <div class="synonyms-list">${synonymsHtml}</div>
+                <div class="german-word">${word.translation}</div>
+                ${word.synonyms && word.synonyms.length > 0 ? `
+                    <div class="synonyms-title">Синонимы:</div>
+                    <div class="synonyms-list">${synonymsHtml}</div>
+                ` : ''}
             </div>
         `;
         return card;
@@ -244,25 +225,20 @@ class VocabularyApp {
         try {
             this.btnSound.classList.add('tts-loading');
 
-            // Проверяем, перевернута ли карточка
             const card = this.cardContainer.querySelector('.card');
             const isFlipped = card && card.classList.contains('flipped');
 
             if (isFlipped) {
-                // Озвучиваем все синонимы по очереди
                 for (const synonym of this.currentCard.synonyms) {
                     await this.tts.speak(synonym, 'de');
-                    // Пауза между синонимами
                     await new Promise(resolve => setTimeout(resolve, 500));
                 }
             } else {
-                // Озвучиваем основное слово
                 await this.tts.speak(this.currentCard.german, 'de');
             }
 
         } catch (error) {
             console.error('TTS error:', error);
-            // Fallback на стандартный TTS
             const utterance = new SpeechSynthesisUtterance(this.currentCard.german);
             utterance.lang = 'de-DE';
             utterance.rate = 0.8;
@@ -285,10 +261,10 @@ class VocabularyApp {
         this.cardContainer.innerHTML = `
             <div class="card">
                 <div style="text-align: center;">
-                    <h2>Herzlichen Glückwunsch! 🎉</h2>
-                    <p>Du hast alle Wörter durchgesehen!</p>
+                    <h2>Поздравляем! 🎉</h2>
+                    <p>Вы просмотрели все слова!</p>
                     <button onclick="location.reload()" class="btn btn-right" style="margin-top: 20px;">
-                        Nochmal beginnen
+                        Начать заново
                     </button>
                 </div>
             </div>
