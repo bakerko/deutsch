@@ -181,7 +181,6 @@ class VocabularyApp {
                 <div class="german-word">${word.german}</div>
                 <div class="translation">${word.translation}</div>
                 <div class="translation">${word.partOfSpeech || ''}</div>
-                ${side === 'front' ? '<div class="side-indicator">Лицевая сторона</div>' : ''}
             </div>
             <div class="card-back">
                 <div class="german-word">${word.translation}</div>
@@ -189,7 +188,6 @@ class VocabularyApp {
                     <div class="synonyms-title">Синонимы:</div>
                     <div class="synonyms-list">${synonymsHtml}</div>
                 ` : ''}
-                ${side === 'back' ? '<div class="side-indicator">Оборотная сторона</div>' : ''}
             </div>
         `;
         return card;
