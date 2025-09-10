@@ -155,7 +155,7 @@ class VocabularyApp {
         card.innerHTML = `
             <div class="card-front">
                 <div class="german-word">${word.german}</div>
-                <span class="synonym-translation">${word.translation}</span>
+                <div class="translation">${word.translation}</div>
                 <div class="translation">${word.partOfSpeech || ''}</div>
             </div>
             <div class="card-back">
