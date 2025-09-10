@@ -1,3 +1,5 @@
+console.log("ловарь 1");
+
 const vocabularyDictionary = [
     {
         german: "die Bewegungsfähigkeit",
