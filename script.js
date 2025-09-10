@@ -15,17 +15,17 @@ vocabularyDictionary.forEach(word => {
     if (!word.stats) {
         word.stats = {
             front: {
-                known: 0,      // количество нажатий "Знаю" для лицевой стороны
-                unknown: 0,    // количество нажатий "Не знаю" для лицевой стороны
-                learned: false // выучена ли лицевая сторона
+                known: 0,
+                unknown: 0,
+                learned: false
             },
             back: {
-                known: 0,      // количество нажатий "Знаю" для оборотной стороны
-                unknown: 0,    // количество нажатий "Не знаю" для оборотной стороны
-                learned: false // выучена ли оборотная сторона
+                known: 0,
+                unknown: 0,
+                learned: false
             },
-            lastShown: 0,      // временная метка последнего показа
-            lastSide: 'front'  // какая сторона показывалась последней
+            lastShown: 0,
+            lastSide: 'front'
         };
     }
 });
@@ -89,7 +89,7 @@ class VocabularyApp {
     constructor() {
         this.words = vocabularyDictionary;
         this.currentCard = null;
-        this.currentSide = 'front'; // 'front' или 'back'
+        this.currentSide = 'front';
         this.tts = new GoogleTranslateTTS();
         this.isSwiping = false;
         this.totalWords = this.words.length;
@@ -124,7 +124,6 @@ class VocabularyApp {
             this.flipCard();
         });
 
-        // Обработка свайпов
         let startX = 0;
         let currentX = 0;
 
@@ -152,7 +151,6 @@ class VocabularyApp {
             this.isSwiping = false;
         });
 
-        // Клик по карточке для переворота
         this.cardContainer.addEventListener('click', (e) => {
             if (!this.isSwiping && e.target.closest('.card') && !e.target.closest('.btn')) {
                 this.flipCard();
@@ -183,7 +181,7 @@ class VocabularyApp {
                 <div class="german-word">${word.german}</div>
                 <div class="translation">${word.translation}</div>
                 <div class="translation">${word.partOfSpeech || ''}</div>
-
+                ${side === 'front' ? '<div class="side-indicator">Лицевая сторона</div>' : ''}
             </div>
             <div class="card-back">
                 <div class="german-word">${word.translation}</div>
@@ -191,83 +189,94 @@ class VocabularyApp {
                     <div class="synonyms-title">Синонимы:</div>
                     <div class="synonyms-list">${synonymsHtml}</div>
                 ` : ''}
-
+                ${side === 'back' ? '<div class="side-indicator">Оборотная сторона</div>' : ''}
             </div>
         `;
         return card;
     }
 
-    // Алгоритм взвешенного выбора следующего слова и стороны
+    // АЛГОРИТМ ВЫБОРА СЛОВА И СТОРОНЫ
     getNextWord() {
         const now = Date.now();
         const twoMinutes = 120000;
 
-        // Фильтруем слова, которые не показывались последние 2 минуты
+        // Все слова доступны для выбора
         const availableWords = this.words.filter(word =>
             now - word.stats.lastShown > twoMinutes
         );
 
         const wordsPool = availableWords.length > 0 ? availableWords : this.words;
 
-        // Рассчитываем веса для каждого слова
-        const weights = wordsPool.map(word => {
-            const baseWeight = 100;
+        // Создаем массив всех возможных вариантов (слово + сторона)
+        const allOptions = [];
 
-            // Определяем, какую сторону показывать
-            let sideWeight = 0;
-            let showSide = 'front';
+        wordsPool.forEach(word => {
+            // Всегда добавляем обе стороны, но с разными весами
+            allOptions.push({
+                word,
+                side: 'front',
+                weight: this.calculateWeight(word, 'front')
+            });
 
-            if (!word.stats.front.learned) {
-                // Если лицевая сторона не выучена, показываем ее
-                showSide = 'front';
-                sideWeight = 150; // приоритет невыученной стороне
-            } else if (!word.stats.back.learned) {
-                // Если оборотная сторона не выучена, показываем ее
-                showSide = 'back';
-                sideWeight = 150;
-            } else {
-                // Если обе стороны выучены, выбираем случайную
-                showSide = Math.random() > 0.5 ? 'front' : 'back';
-                sideWeight = 30; // очень низкий вес для выученных слов
-            }
-
-            // Учитываем статистику для выбранной стороны
-            const sideStats = word.stats[showSide];
-            const unknownBonus = sideStats.unknown * 5;
-            const knownPenalty = sideStats.known * 3;
-
-            let weight = baseWeight + unknownBonus - knownPenalty + sideWeight;
-
-            // Устанавливаем ограничения на вес
-            weight = Math.max(10, Math.min(300, weight));
-
-            return { word, weight, showSide };
+            allOptions.push({
+                word,
+                side: 'back',
+                weight: this.calculateWeight(word, 'back')
+            });
         });
 
-        // Выбираем случайное слово с учетом весов
-        const totalWeight = weights.reduce((sum, item) => sum + item.weight, 0);
+        // Выбираем случайный вариант с учетом весов
+        const totalWeight = allOptions.reduce((sum, option) => sum + option.weight, 0);
         let random = Math.random() * totalWeight;
 
-        for (let i = 0; i < weights.length; i++) {
-            random -= weights[i].weight;
+        for (let i = 0; i < allOptions.length; i++) {
+            random -= allOptions[i].weight;
             if (random <= 0) {
                 return {
-                    word: weights[i].word,
-                    side: weights[i].showSide
+                    word: allOptions[i].word,
+                    side: allOptions[i].side
                 };
             }
         }
 
         return {
-            word: weights[weights.length - 1].word,
-            side: weights[weights.length - 1].showSide
+            word: allOptions[0].word,
+            side: allOptions[0].side
         };
+    }
+
+    // РАСЧЕТ ВЕСА ДЛЯ КОНКРЕТНОЙ СТОРОНЫ
+    calculateWeight(word, side) {
+        const sideStats = word.stats[side];
+        const baseWeight = 100;
+
+        // БОЛЬШОЙ бонус за невыученные стороны
+        const learnedBonus = sideStats.learned ? 0 : 200;
+
+        // Бонус за ошибки (+10% за каждую ошибку)
+        const unknownBonus = sideStats.unknown * 10;
+
+        // Небольшой штраф за правильные ответы (-3% за каждый правильный)
+        const knownPenalty = sideStats.known * 3;
+
+        // Бонус за давность показа (чем дольше не показывали - тем выше вес)
+        const timeSinceLastShow = Date.now() - word.stats.lastShown;
+        const timeBonus = Math.min(100, timeSinceLastShow / 1000);
+
+        // Штраф за повторный показ той же стороны
+        const sameSidePenalty = word.stats.lastSide === side ? 20 : 0;
+
+        let weight = baseWeight + learnedBonus + unknownBonus - knownPenalty + timeBonus - sameSidePenalty;
+
+        // Гарантируем минимальный вес для всех вариантов
+        weight = Math.max(20, Math.min(500, weight));
+
+        return weight;
     }
 
     showNextCard() {
         this.cardContainer.innerHTML = '';
 
-        // Проверяем, все ли стороны всех слов выучены
         const allLearned = this.words.every(word =>
             word.stats.front.learned && word.stats.back.learned
         );
@@ -284,6 +293,10 @@ class VocabularyApp {
         this.currentCard.stats.lastShown = Date.now();
         this.currentCard.stats.lastSide = this.currentSide;
 
+        console.log(`Показываем: ${this.currentCard.german}, сторона: ${this.currentSide}`);
+        console.log(`Front: known=${this.currentCard.stats.front.known}, unknown=${this.currentCard.stats.front.unknown}, learned=${this.currentCard.stats.front.learned}`);
+        console.log(`Back: known=${this.currentCard.stats.back.known}, unknown=${this.currentCard.stats.back.unknown}, learned=${this.currentCard.stats.back.learned}`);
+
         const card = this.createCard(this.currentCard, this.currentSide);
         this.cardContainer.appendChild(card);
     }
@@ -295,7 +308,7 @@ class VocabularyApp {
         const sideStats = this.currentCard.stats[this.currentSide];
         sideStats.known++;
 
-        // Помечаем сторону как выученную после 2 правильных ответов
+        // Помечаем сторону как выученную после 1 правильного ответа без ошибок
         if (sideStats.known >= 1 && sideStats.unknown === 0) {
             sideStats.learned = true;
         }
@@ -342,11 +355,7 @@ class VocabularyApp {
         try {
             this.btnSound.classList.add('tts-loading');
 
-            const card = this.cardContainer.querySelector('.card');
-            const isFlipped = card && card.classList.contains('flipped');
-            const currentSide = isFlipped ? 'back' : 'front';
-
-            if (currentSide === 'back') {
+            if (this.currentSide === 'back') {
                 for (const synonym of this.currentCard.synonyms) {
                     await this.tts.speak(synonym, 'de');
                     await new Promise(resolve => setTimeout(resolve, 500));
@@ -369,7 +378,6 @@ class VocabularyApp {
     }
 
     updateStats() {
-        // Считаем количество выученных сторон
         const learnedSides = this.words.reduce((total, word) => {
             return total + (word.stats.front.learned ? 1 : 0) + (word.stats.back.learned ? 1 : 0);
         }, 0);
