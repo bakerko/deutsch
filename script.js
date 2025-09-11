@@ -95,10 +95,15 @@ class VocabularyApp {
         this.totalWords = this.words.length;
         this.learnedWords = 0;
 
+        console.log('VocabularyApp');
+
         this.initializeApp();
     }
 
     initializeApp() {
+
+        console.log('VocabularyApp initializeApp');
+
         this.cardContainer = document.getElementById('cardContainer');
         this.btnLeft = document.getElementById('btnLeft');
         this.btnRight = document.getElementById('btnRight');
