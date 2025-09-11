@@ -9,7 +9,7 @@ function getQueryParam(param) {
 // 2. Функция-загрузчик словаря
 function loadDictionary(lang, callback) {
     const script = document.createElement('script');
-    script.src = `dictionary-${lang}.js`;
+    script.src = `dictionary_${lang}.js`;
 
     script.onload = function() {
         console.log(`Словарь для языка "${lang}" загружен!`);
@@ -20,7 +20,7 @@ function loadDictionary(lang, callback) {
 
     script.onerror = function() {
         console.error(`Не удалось загрузить словарь для "${lang}". Пробую загрузить резервный (ru)...`);
-        loadDictionary('ru', callback);
+        //loadDictionary('ru', callback);
     };
 
     document.head.appendChild(script);
@@ -35,7 +35,7 @@ function loadMainScript() {
 
 // 4. Определяем язык и запускаем процесс
 const langParam = getQueryParam('lang');
-const allowedLangs = ['ru', 'ar', 'en'];
+const allowedLangs = ['ru', 'ar'];
 const targetLang = allowedLangs.includes(langParam) ? langParam : 'ru';
 
 // 5. Сначала грузим словарь, потом основной скрипт
