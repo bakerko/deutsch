@@ -414,12 +414,5 @@ class VocabularyApp {
     }
 }
 
-// Инициализация приложения
-console.log('vor');
-document.addEventListener('DOMContentLoaded', () => {
 
-    console.log('inside');
     new VocabularyApp();
-
-    console.log('nach');
-});
