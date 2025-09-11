@@ -190,7 +190,7 @@ class VocabularyApp {
             <div class="card-back">
                 <div class="german-word">${word.translation}</div>
                 ${word.synonyms && word.synonyms.length > 0 ? `
-                    <div class="synonyms-title">Синонимы:</div>
+                    <div class="synonyms-title">Synonyms:</div>
                     <div class="synonyms-list">${synonymsHtml}</div>
                 ` : ''}
             </div>
