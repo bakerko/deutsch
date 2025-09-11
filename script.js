@@ -3,7 +3,7 @@ console.log('Script.js запущен');
 
 // Проверка что словарь загружен
 if (typeof vocabularyDictionary === 'undefined') {
-    console.error('СЛОВАРЬ НЕ ЗАГРУЖЕН! Проверь dictionary.js');
+    console.error('СЛОВАРЬ НЕ ЗАГРУЖЕН! Проверь dictionary_ru.js');
     alert('Ошибка: словарь не загружен. Проверь консоль для деталей.');
     throw new Error('vocabularyDictionary is not defined');
 }
