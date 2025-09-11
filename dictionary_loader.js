@@ -28,7 +28,7 @@ script.onerror = function() {
     console.error(`Не удалось загрузить словарь для "${targetLang}". Загружаю русский.`);
     const fallbackScript = document.createElement('script');
     fallbackScript.src = 'dictionary-ru.js';
-    fallbackScript.onload = initApp;
+    fallbackScript.onload = initApp_loader;
     document.head.appendChild(fallbackScript);
 };
 
