@@ -9,7 +9,7 @@ function getQueryParam(param) {
 // 2. Функция-загрузчик словаря
 function loadDictionary(lang, callback) {
     const script = document.createElement('script');
-    script.src = `dictionary_${lang}.js`;
+    script.src = `dictionary2_${lang}.js`;
 
     script.onload = function() {
         console.log(`Словарь для языка "${lang}" загружен!`);
